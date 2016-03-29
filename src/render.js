@@ -64,6 +64,8 @@ module.exports = function render() {
         changed.push(this.features[id].toGeoJSON());
       }
 
+      // do the zoom work here?
+
       this.ctx.events.currentModeRender(featureInternal, pusher);
     });
 
@@ -91,4 +93,5 @@ module.exports = function render() {
     this.ctx.map.fire('draw.changed', changed);
   }
   this.isDirty = false;
+  this.zoomRender = this.zoomLevel;
 };
