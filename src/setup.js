@@ -47,6 +47,16 @@ module.exports = function(ctx) {
     },
     addLayers: function() {
       ctx.map.batch((batch) => {
+
+        batch.addSource('mapbox-gl-draw-cluster', {
+          data: {
+            type: 'FeatureCollection',
+            features: []
+          },
+          type: 'geojson',
+          cluster: true
+        });
+
         // drawn features style
         batch.addSource('mapbox-gl-draw-cold', {
           data: {

@@ -10,6 +10,7 @@ module.exports = function render() {
     };
 
     var renderCold = this.isDirty;
+    var renderCluster = this.isDirty;
 
     var nextHistory = {};
 
@@ -36,7 +37,11 @@ module.exports = function render() {
         next.changed--;
       }
 
-      if (next.changed < 2) {
+      if (about.meta === 'too-small') {
+        features.cluster.push(geojson);
+        renderCluster = renderCluster ? true : past.changed === 3;
+      }
+      else if (next.changed < 2) {
         features.cold.push(geojson);
         renderCold = renderCold ? true : next.changed !== past.changed;
       }
@@ -63,6 +68,13 @@ module.exports = function render() {
     });
 
     this.renderHistory = nextHistory;
+
+    if (renderCluster) {
+      this.ctx.map.getSource('mapbox-gl-draw-cluster').setData({
+        type: 'FeatureCollection',
+        features: features.cluster
+      });
+    }
 
     if (renderCold) {
       this.ctx.map.getSource('mapbox-gl-draw-cold').setData({
