@@ -1,3 +1,5 @@
+var turfEnvelope = require('turf-envelope');
+
 
 module.exports = function render() {
   var isStillAlive = this.ctx.map.getSource('mapbox-gl-draw-hot') !== undefined;
@@ -64,19 +66,38 @@ module.exports = function render() {
         changed.push(this.features[id].toGeoJSON());
       }
 
-      // do the zoom work here?
+      var envelope = turfEnvelope({
+        type: 'FeatureCollection',
+        features: [featureInternal]
+      });
+
+      var topLeftCoord = envelope.geometry.coordinates[0][0];
+      var bottomRightCoord = envelope.geometry.coordinates[0][2];
+
+      var topLeftPixels = this.ctx.map.project({
+        lng: topLeftCoord[0],
+        lat: topLeftCoord[1]
+      });
+
+      var bottomRightPixels = this.ctx.map.project({
+        lng: bottomRightCoord[0],
+        lat: bottomRightCoord[1]
+      });
+
+      var dx = Math.abs(topLeftPixels.x - bottomRightPixels.x);
+      var dy = Math.abs(topLeftPixels.y - bottomRightPixels.y);
+
+      var distance = Math.pow((dx*dx) + (dy*dy), .5);
+
+      if (distance < 10) {
+        featureInternal.properties.meta = 'too-small';
+        featureInternal.properties.point = topLeftCoord;
+      }
 
       this.ctx.events.currentModeRender(featureInternal, pusher);
     });
 
     this.renderHistory = nextHistory;
-
-    if (renderCluster) {
-      this.ctx.map.getSource('mapbox-gl-draw-cluster').setData({
-        type: 'FeatureCollection',
-        features: features.cluster
-      });
-    }
 
     if (renderCold) {
       this.ctx.map.getSource('mapbox-gl-draw-cold').setData({
