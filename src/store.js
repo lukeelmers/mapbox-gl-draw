@@ -40,8 +40,9 @@ Store.prototype.getAll = function() {
 Store.prototype.delete = function (ids) {
   var deleted = [];
   ids.forEach((id) => {
-    var idx = this.featureIds.indexOf(id.toString());
-    if (idx !== -1) {
+    var idx = this.featureIds.indexOf(id);
+    var idy = this.featureIds.indexOf(parseInt(id));
+    if (idx !== -1 || idy !== -1) {
       var feature = this.get(id);
       deleted.push(feature.toGeoJSON());
       delete this.features[id];
