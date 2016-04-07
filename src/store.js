@@ -47,7 +47,8 @@ Store.prototype.delete = function (ids) {
       deleted.push(feature.toGeoJSON());
       delete this.features[id];
       delete this.featureHistory[id];
-      this.featureIds.splice(idx, 1);
+      if (idx !== -1) this.featureIds.splice(idx, 1);
+      if (idy !== -1) this.featureIds.splice(idy, 1);
     }
   });
 
