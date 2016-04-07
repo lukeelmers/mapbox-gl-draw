@@ -40,6 +40,8 @@ Store.prototype.getAll = function() {
 Store.prototype.delete = function (ids) {
   var deleted = [];
   ids.forEach((id) => {
+    // make sure it's an integer before we check the index
+    id = parseInt(id);
     var idx = this.featureIds.indexOf(id);
     if (idx !== -1) {
       var feature = this.get(id);

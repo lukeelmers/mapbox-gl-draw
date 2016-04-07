@@ -70,6 +70,8 @@ module.exports = function(ctx, startingSelectedFeatureIds) {
           // add to selected
           selectedFeaturesById[id] = ctx.store.get(id);
           this.fire('selected.start', [id]);
+          // add custom event
+          ctx.map.fire('draw.selected.start', [id]);
         }
         else {
           //make selected
@@ -78,6 +80,8 @@ module.exports = function(ctx, startingSelectedFeatureIds) {
           selectedFeaturesById[id] = ctx.store.get(id);
           this.fire('selected.end', wasSelected);
           this.fire('selected.start', [id]);
+          // add custom event
+          ctx.map.fire('draw.selected.start', [id]);
         }
       });
 
