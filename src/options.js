@@ -3,7 +3,7 @@ const defaultOptions = {
   position: 'top-left',
   keybindings: true,
   displayControlsDefault: true,
-  styles: {},
+  styles: [],
   controls: {}
 };
 

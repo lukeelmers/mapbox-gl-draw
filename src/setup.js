@@ -7,6 +7,9 @@ var theme = require('./lib/theme');
 
 module.exports = function(ctx) {
 
+  // merge provided styles into theme
+  theme = Object.assign(theme, ctx.options.styles);
+
   ctx.events = events(ctx);
 
   ctx.map = null;
